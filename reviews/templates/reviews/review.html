@@ -6,6 +6,11 @@
     <title>Your review</title>
 </head>
 <body>
-    
+    <form method="POST" action="/">
+        {% csrf_token %}
+        <label for="username">Your name</label>
+        <input id="username" name="username" type="text">
+        <button type="submit">Send</button>
+    </form>
 </body>
 </html>
