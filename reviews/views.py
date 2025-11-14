@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView, DeleteView, FormView
+from django.views.generic.edit import CreateView
 
 from .forms import ReviewForm
 from .models import Review
@@ -10,7 +11,9 @@ from .models import Review
 # Create your views here.
 
 
-class ReviewView(FormView):
+class ReviewView(CreateView):
+    model = Review
+    # fields = "__all__"
     form_class = ReviewForm
     template_name = "reviews/review.html"
     success_url = "/thank-you"
