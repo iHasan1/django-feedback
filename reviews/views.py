@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
 from django.views.generic.base import TemplateView
-from django.views.generic import ListView, DeleteView
+from django.views.generic import ListView, DeleteView, FormView
 
 from .forms import ReviewForm
 from .models import Review
@@ -10,24 +10,25 @@ from .models import Review
 # Create your views here.
 
 
-class ReviewView(View):
-    def get(self, request):
-        form = ReviewForm()
+class ReviewView(FormView):
+    form_class = ReviewForm
+    template_name = "reviews/review.html"
+    success_url = "/thank-you"
 
-        return render(request, "reviews/review.html", {
-            "form": form
-        })
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
 
-    def post(self, request):
-        form = ReviewForm(request.POST)
+    # def post(self, request):
+    #     form = ReviewForm(request.POST)
 
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect("/thank-you")
+    #     if form.is_valid():
+    #         form.save()
+    #         return HttpResponseRedirect("/thank-you")
         
-        return render(request, "reviews/review.html", {
-            "form": form
-        })
+    #     return render(request, "reviews/review.html", {
+    #         "form": form
+    #     })
 
 
 class ThankYouView(TemplateView):
@@ -54,4 +55,3 @@ class ReviewsListView(ListView):
 class SingleReviewView(DeleteView):
     template_name = "reviews/single_review.html"
     model = Review
-    
